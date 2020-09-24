@@ -11,7 +11,7 @@ import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 @EnableAsync
 public class AsyncConfiguration {
 	
-	private final static String NAME_PREFIX = "ASYNCH THREAD EXECUTOR - ";
+	private final static String NAME_PREFIX = "EXECUTOR";
 
 	@Value("${core.pool.size}")
 	private int corePoolSize;
