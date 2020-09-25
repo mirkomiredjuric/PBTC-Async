@@ -1,5 +1,6 @@
 package com.polus.controller;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
@@ -11,6 +12,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -35,7 +38,8 @@ public class PersonController {
 		CompletableFuture<Person> person2 = personService.findPersonByName("Tijana");
 		CompletableFuture<Person> person3 = personService.findPersonByName("Branko");
 		
-		CompletableFuture.allOf(person1, person2).join();
+		CompletableFuture.allOf(person1, person2, person3).join();
+		LOGGER.info("Asynch call end...");
 		LOGGER.info("-----> " + person1.get());
 		LOGGER.info("-----> " + person2.get());
 		LOGGER.info("-----> " + person3.get());
@@ -44,5 +48,21 @@ public class PersonController {
 	@GetMapping("/allPerons")
 	public List<Person> getAllPersons(){
 		return personService.getAllPersons();
+	}
+	
+	@PostMapping("/insertPersons")
+	public ResponseEntity insertPersons(@RequestBody List<Person> persons) {
+		LOGGER.info("Insert Person start...");
+		try {
+			for (Person person : persons) {
+				personService.insertPerson(person);
+			}
+			LOGGER.info("Insert Person end...");
+			return ResponseEntity.ok("Persons added to the database");
+		}catch (Exception e) {
+			return (ResponseEntity) ResponseEntity.status(HttpStatus.BAD_REQUEST);
+		}
+		
+		
 	}
 }
