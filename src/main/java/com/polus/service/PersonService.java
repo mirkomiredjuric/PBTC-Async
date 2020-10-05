@@ -38,9 +38,12 @@ public class PersonService {
 		return (List<Person>) personRepository.findAll();
 	}
 	
-	
-	public void insertPerson(Person person) {
-		personRepository.save(person);
+	@Async("threadPoolExecutor1")
+	public CompletableFuture<List<Person>> insertPerson(List persons) {
+
+		personRepository.saveAll(persons);
+
+		return CompletableFuture.completedFuture(persons);
 		
 	}
 }

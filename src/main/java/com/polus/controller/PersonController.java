@@ -54,9 +54,9 @@ public class PersonController {
 	public ResponseEntity insertPersons(@RequestBody List<Person> persons) {
 		LOGGER.info("Insert Person start...");
 		try {
-			for (Person person : persons) {
-				personService.insertPerson(person);
-			}
+			
+				personService.insertPerson(persons);
+			
 			LOGGER.info("Insert Person end...");
 			return ResponseEntity.ok("Persons added to the database");
 		}catch (Exception e) {
